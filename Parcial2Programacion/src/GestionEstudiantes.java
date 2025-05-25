@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,10 +7,10 @@ import java.util.Scanner;
 public class GestionEstudiantes {
     public static void ingresarEstudiantes(Scanner scanner) {
 
-        // 1. Lista las materias existentes (archivos en RUTA_DOCENTE)
+        // 1. Lista las materias existentes
         File carpetaDocente = new File(Constantes.RUTA_DOCENTE);
         String[] materias = carpetaDocente.list();
-        
+
         if (materias == null || materias.length == 0) {
             System.out.println("No hay materias registradas. Primero ingrese una materia.");
             return;
@@ -25,7 +26,7 @@ public class GestionEstudiantes {
         do {
             System.out.print("<3 Seleccione una materia (número): ");
             opcionMateria = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine(); // Limpia el buffer
         } while (opcionMateria < 1 || opcionMateria > materias.length);
 
         String materiaSeleccionada = materias[opcionMateria - 1];
@@ -55,7 +56,7 @@ public class GestionEstudiantes {
 
             // Solicita 3 notas válidas
             Map<String, Double> notas = new HashMap<>();
-            String[] tiposNotas = {"Nota 1", "Nota 2", "Nota 3"};
+            String[] tiposNotas = { "Nota 1", "Nota 2", "Nota 3" };
 
             for (String tipo : tiposNotas) {
                 boolean notaValida = false;
@@ -80,19 +81,19 @@ public class GestionEstudiantes {
 
             // 5. Guarda los datos del estudiante
             String rutaAlumno = Constantes.RUTA_ALUMNO + codigo + ".txt";
-            String notasStr = String.format("%.1f,%.1f,%.1f", notas.get("Nota 1"), notas.get("Nota 2"), notas.get("Nota 3"));
-            
+            String notasStr = String.format("%.1f,%.1f,%.1f", notas.get("Nota 1"), notas.get("Nota 2"),
+                    notas.get("Nota 3"));
+
             AdminFile.writeFileBuffer(rutaAlumno, notasStr);
 
-            // 6. Calcula el promedio y guardar en la materia
+            // 6. Calcula el promedio y guarda en el archivo de la materia
             double promedio = (notas.get("Nota 1") + notas.get("Nota 2") + notas.get("Nota 3")) / 3;
-            String registroMateria = String.format("%s - %s: %.1f", codigo, nombre, promedio);
-            
+            String registroMateria = String.format("Código: %s, Nombre: %s, Promedio: %.1f",
+                    codigo, nombre, promedio);
+
             AdminFile.writeFileBuffer(rutaMateria, registroMateria);
         }
 
         System.out.println("\n¡Estudiantes registrados exitosamente!");
-
-        scanner.close();
     }
 }

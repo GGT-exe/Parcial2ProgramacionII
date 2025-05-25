@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,15 +8,30 @@ import java.io.IOException;
 
 public class AdminFile {
 
-    // Método para crear carpetas (ya usa rutas completas)
+    // Método para crear carpetas
     public static boolean createFolders(String path) {
-        File folder = new File(path); // Ej: "db/personas/alumno/"
-        return folder.mkdirs();
+        try {
+            File folder = new File(path);
+            if (folder.exists()) {
+                return true; // Ya existe
+            }
+            boolean created = folder.mkdirs();
+            if (!created) {
+                System.err.println("Error: No se pudo crear el directorio " + path);
+            }
+            return created;
+        } catch (SecurityException e) {
+            System.err.println("Error de seguridad al crear directorios: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error inesperado al crear directorios: " + e.getMessage());
+            return false;
+        }
     }
 
-    // Método para crear archivos (usa rutas completas)
+    // Método para crear archivos
     public static boolean createFile(String fullPath) {
-        File file = new File(fullPath); // Ej: "db/personas/docente/matematicas.txt"
+        File file = new File(fullPath);
         try {
             return file.createNewFile();
         } catch (IOException e) {
@@ -24,7 +40,7 @@ public class AdminFile {
         }
     }
 
-    // Método para escribir en archivos (usa rutas completas)
+    // Método para escribir en archivos
     public static boolean writeFileBuffer(String fullPath, String texto) {
         try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fullPath, true))) {
             buffer.write(texto);
@@ -36,7 +52,7 @@ public class AdminFile {
         }
     }
 
-    // Método para leer archivos (usa rutas completas)
+    // Método para leer archivos
     public static void readFileBuffer(String fullPath) {
         try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
             String line;
@@ -48,7 +64,7 @@ public class AdminFile {
         }
     }
 
-    // Método para eliminar carpetas (usa rutas completas)
+    // Método para eliminar carpetas
     public static boolean deleteFolder(String folderPath) {
         File folder = new File(folderPath);
         

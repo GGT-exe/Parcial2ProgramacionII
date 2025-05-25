@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
-    private static final String RUTA_MATERIAS = Constantes.RUTA_DOCENTE;
+
 
     public static void mostrarMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -40,7 +40,7 @@ public class Menu {
                             }
                             break;
                         case 3:
-                            verificarInformacion(scanner);
+                            VerificarInfo.verificarInformacion(scanner);
                             break;
                         case 4:
                             salir();
@@ -61,44 +61,11 @@ public class Menu {
 
     // Método para validar si existen materias registradas.
     private static boolean validarMateriasExistentes() {
-        File carpetaDocente = new File(RUTA_MATERIAS);
+        File carpetaDocente = new File(Constantes.RUTA_MATERIAS);
         String[] materias = carpetaDocente.list();
         return materias != null && materias.length > 0;
     }
 
-    // Método para verificar la información de los estudiantes.
-    private static void verificarInformacion(Scanner scanner) {
-        File carpetaDocente = new File(RUTA_MATERIAS);
-        String[] materias = carpetaDocente.list();
-
-        if (materias == null || materias.length == 0) {
-            System.out.println("No hay materias registradas.");
-            return;
-        }
-
-        System.out.println("\nMaterias disponibles:");
-        for (int i = 0; i < materias.length; i++) {
-            System.out.println((i + 1) + ". " + materias[i].replace(".txt", ""));
-        }
-
-        System.out.print("Seleccione una materia (número): ");
-        try {
-            int opcion = scanner.nextInt();
-            scanner.nextLine();
-
-            if (opcion < 1 || opcion > materias.length) {
-                System.out.println("Opción inválida.");
-                return;
-            }
-
-            String rutaMateria = RUTA_MATERIAS + materias[opcion - 1];
-            System.out.println("\n--- Información de la materia ---");
-            AdminFile.readFileBuffer(rutaMateria);
-        } catch (InputMismatchException e) {
-            System.out.println("Error: Ingrese un número válido.");
-            scanner.nextLine();
-        }
-    }
 
     // Método para salir del programa.
     private static void salir() {
